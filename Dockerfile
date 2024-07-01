@@ -14,7 +14,6 @@ ENV LANG="C.UTF-8" \
     MOVIEPILOT_AUTO_UPDATE=release \
     AUTH_SITE="iyuu" \
     IYUU_SIGN=""
-WORKDIR "/app"
 RUN apt-get update -y \
     && apt-get upgrade -y \
     && apt-get -y install \
@@ -49,7 +48,7 @@ RUN apt-get update -y \
         /moviepilot/.cache \
         /var/lib/apt/lists/* \
         /var/tmp/*
-COPY requirements.txt requirements.txt
+
 RUN apt-get update -y \
     && apt-get install -y build-essential \
     && pip install --upgrade pip \
@@ -63,7 +62,10 @@ RUN apt-get update -y \
         /tmp/* \
         /moviepilot/.cache \
         /var/lib/apt/lists/* \
-        /var/tmp/*
+        /var/tmp/* \
+# demo
+WORKDIR "/app"
+COPY requirements.txt requirements.txt
 COPY . .
 RUN cp -f /app/nginx.conf /etc/nginx/nginx.template.conf \
     && cp -f /app/update /usr/local/bin/mp_update \
@@ -72,6 +74,7 @@ RUN cp -f /app/nginx.conf /etc/nginx/nginx.template.conf \
     && mkdir -p ${HOME} /var/lib/haproxy/server-state \
     && groupadd -r moviepilot -g 911 \
     && useradd -r moviepilot -g moviepilot -d ${HOME} -s /bin/bash -u 911 \
+#    获取python版本
     && python_ver=$(python3 -V | awk '{print $2}') \
     && echo "/app/" > /usr/local/lib/python${python_ver%.*}/site-packages/app.pth \
     && echo 'fs.inotify.max_user_watches=5242880' >> /etc/sysctl.conf \
