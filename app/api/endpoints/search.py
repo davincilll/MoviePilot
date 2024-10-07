@@ -15,7 +15,7 @@ router = APIRouter()
 @router.get("/last", summary="查询搜索结果", response_model=List[schemas.Context])
 def search_latest(_: schemas.TokenPayload = Depends(verify_token)) -> Any:
     """
-    查询搜索结果
+    查询上一次的搜索结果
     """
     torrents = SearchChain().last_search_results()
     return [torrent.to_dict() for torrent in torrents]
@@ -32,6 +32,7 @@ def search_by_id(mediaid: str,
     """
     if mtype:
         mtype = MediaType(mtype)
+        # todo: 这个season有什么用还没整明白
     if season:
         season = int(season)
     if mediaid.startswith("tmdb:"):

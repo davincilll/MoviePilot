@@ -155,7 +155,7 @@ class MessageChain(ChainBase):
         if text.startswith('/'):
             # 执行命令
             self.eventmanager.send_event(
-                EventType.CommandExcute,
+                EventType.CommandExecute,
                 {
                     "cmd": text,
                     "user": userid,

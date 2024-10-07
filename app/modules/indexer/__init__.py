@@ -1,12 +1,12 @@
 from datetime import datetime
 from typing import List, Optional, Tuple, Union
 
+from app.helper.sites import SitesHelper
 from ruamel.yaml import CommentedMap
 
 from app.core.config import settings
 from app.core.context import TorrentInfo
 from app.db.sitestatistic_oper import SiteStatisticOper
-from app.helper.sites import SitesHelper
 from app.log import logger
 from app.modules import _ModuleBase
 from app.modules.indexer.haidan import HaiDanSpider
@@ -67,7 +67,8 @@ class IndexerModule(_ModuleBase):
             """
             if not settings.SEARCH_MULTIPLE_NAME:
                 return _torrents
-            # 通过encosure去重
+            # 通过enclosure去重
+            # comment: 这里是根据种子名称和副标题来进行去重的，也可以去用comment进行去重
             return list({f"{t.title}_{t.description}": t for t in _torrents}.values())
 
         # 确认搜索的名字
@@ -97,6 +98,7 @@ class IndexerModule(_ModuleBase):
                 search_word = StringUtils.clear(search_word, replace_word=" ", allow_space=True)
 
             try:
+                # 获取site对应的parser来进行搜索
                 if site.get('parser') == "TNodeSpider":
                     error_flag, result = TNodeSpider(site).search(
                         keyword=search_word,

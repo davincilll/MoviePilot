@@ -357,7 +357,7 @@ class Scheduler(metaclass=Singleton):
         """
         启动定时服务
         """
-        # 处理job_id格式
+        # 处理job_id格式,改变运行状态
         with self._lock:
             job = self._jobs.get(job_id)
             if not job:

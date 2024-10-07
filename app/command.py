@@ -24,7 +24,7 @@ from app.utils.object import ObjectUtils
 from app.utils.singleton import Singleton
 
 
-class CommandChian(ChainBase):
+class CommandChain(ChainBase):
     """
     插件处理链
     """
@@ -49,7 +49,7 @@ class Command(metaclass=Singleton):
         # 插件管理器
         self.pluginmanager = PluginManager()
         # 处理链
-        self.chain = CommandChian()
+        self.chain = CommandChain()
         # 定时服务管理
         self.scheduler = Scheduler()
         # 消息管理器
@@ -357,7 +357,7 @@ class Command(metaclass=Singleton):
         """
         EventManager().send_event(etype, data)
 
-    @eventmanager.register(EventType.CommandExcute)
+    @eventmanager.register(EventType.CommandExecute)
     def command_event(self, event: ManagerEvent) -> None:
         """
         注册命令执行事件

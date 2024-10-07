@@ -38,9 +38,11 @@ class SearchChain(ChainBase):
         :param tmdbid: TMDB ID
         :param doubanid: 豆瓣 ID
         :param mtype: 媒体，电影 or 电视剧
+        # todo：用枚举进行约束
         :param area: 搜索范围，title or imdbid
         :param season: 季数
         """
+        # 识别得到媒体信息
         mediainfo = self.recognize_media(tmdbid=tmdbid, doubanid=doubanid, mtype=mtype)
         if not mediainfo:
             logger.error(f'{tmdbid} 媒体信息识别失败！')
@@ -53,7 +55,7 @@ class SearchChain(ChainBase):
                 }
             }
         results = self.process(mediainfo=mediainfo, area=area, no_exists=no_exists)
-        # 保存结果
+        # 保存上一次的结果
         bytes_results = pickle.dumps(results)
         self.systemconfig.set(SystemConfigKey.SearchResults, bytes_results)
         return results
@@ -300,10 +302,11 @@ class SearchChain(ChainBase):
                     logger.warn(msg)
                     continue
                 indexer_sites.append(indexer)
+
         if not indexer_sites:
             logger.warn('未开启任何有效站点，无法搜索资源')
             return []
-
+        # todo: 搞明白这里的siteshelper的作用
         # 开始进度
         self.progress.start(ProgressKey.Search)
         # 开始计时

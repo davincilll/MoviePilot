@@ -19,7 +19,8 @@ class EventType(Enum):
     # 插件动作
     PluginAction = "plugin.action"
     # 执行命令
-    CommandExcute = "command.excute"
+    # todo:梳理耦合关系，修改源码
+    CommandExecute = "command.execute"
     # 站点已删除
     SiteDeleted = "site.deleted"
     # 站点已更新

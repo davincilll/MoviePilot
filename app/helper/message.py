@@ -19,10 +19,11 @@ class MessageHelper(metaclass=Singleton):
         """
         存消息
         :param message: 消息
-        :param role: 消息通道 systm：系统消息，plugin：插件消息，user：用户消息
+        :param role: 消息通道 system：系统消息，plugin：插件消息，user：用户消息
         :param title: 标题
         :param note: 附件json
         """
+        # 这里将系统和插件消息都存到系统队列，方便统一处理
         if role in ["system", "plugin"]:
             # 没有标题时获取插件名称
             if role == "plugin" and not title:
